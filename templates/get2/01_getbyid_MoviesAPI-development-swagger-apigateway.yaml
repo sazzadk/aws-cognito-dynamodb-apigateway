@@ -1,0 +1,73 @@
+---
+swagger: "2.0"
+info:
+  version: "2018-12-31T18:46:47Z"
+  title: "MoviesAPI"
+host: "q85og2jq9f.execute-api.us-east-1.amazonaws.com"
+basePath: "/development"
+schemes:
+- "https"
+paths:
+  /movies:
+    get:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::111111111111:role/apigw01-dynamo-role"
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/Scan"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: "[\r\n #foreach($item in $input.path('$.Items'))\r\
+                \n \t{\r\n \t\t\"id\": \"$item.get('id').get('S')\",\r\n \t\t\"name\"\
+                : \"$item.get('name').get('S')\",\r\n \t\t\"description\" : \"$item.get('description').get('S')\"\
+                \r\n \t}\r\n \t#if ($foreach.hasNext), #end\r\n #end\t\r\n\r\n]\r\n"
+        requestTemplates:
+          application/json: "{\n    \"TableName\" : \"movies\"\n}"
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+  /movies/{id}:
+    get:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::111111111111:role/apigw01-dynamo-role"
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/GetItem"
+        responses:
+          2\d{2}:
+            statusCode: "200"
+            responseTemplates:
+              application/json: "{\r\n\t\"id\": $input.json('$.Item.id.S'),\r\n\t\"\
+                name\": $input.json('$.Item.name.S'),\r\n\t\"description\" : $input.json('$.Item.description.S')\r\
+                \n}"
+        requestTemplates:
+          application/json: "{\n  \"TableName\" : \"movies\",\n  \"Key\" : {\n   \
+            \ \"id\" : {\n        \"S\" : \"$input.params('id')\"\n    }  \n  }\n}"
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+definitions:
+  Empty:
+    type: "object"
+    title: "Empty Schema"

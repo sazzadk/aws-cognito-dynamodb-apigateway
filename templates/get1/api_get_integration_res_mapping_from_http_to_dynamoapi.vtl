@@ -1,0 +1,11 @@
+[
+ #foreach($item in $input.path('$.Items'))
+ 	{
+ 		"id": "$item.get('id').get('S')",
+ 		"name": "$item.get('name').get('S')",
+ 		"description" : "$item.get('description').get('S')"
+ 	}
+ 	#if ($foreach.hasNext), #end
+ #end	
+
+]

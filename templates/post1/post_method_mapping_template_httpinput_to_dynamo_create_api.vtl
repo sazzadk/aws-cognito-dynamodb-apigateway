@@ -1,0 +1,14 @@
+{
+	"TableName": "movies",
+	"Item":{
+		"id": {
+			"S": "$input.path('$.id')"
+		},
+		"name": {
+			"S": "$input.path('$.name')"
+		},
+		"description": {
+			"S": "$input.path('$.description')"
+		}
+	}
+}

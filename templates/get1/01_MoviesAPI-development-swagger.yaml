@@ -1,0 +1,25 @@
+---
+swagger: "2.0"
+info:
+  version: "2018-12-31T16:50:00Z"
+  title: "MoviesAPI"
+host: "q85og2jq9f.execute-api.us-east-1.amazonaws.com"
+basePath: "/development"
+schemes:
+- "https"
+paths:
+  /movies:
+    get:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+definitions:
+  Empty:
+    type: "object"
+    title: "Empty Schema"

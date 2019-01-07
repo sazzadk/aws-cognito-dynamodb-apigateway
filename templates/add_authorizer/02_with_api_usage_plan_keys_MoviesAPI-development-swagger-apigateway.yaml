@@ -1,0 +1,202 @@
+---
+swagger: "2.0"
+info:
+  version: "2019-01-01T23:46:11Z"
+  title: "MoviesAPI"
+host: "q85og2jq9f.execute-api.us-east-1.amazonaws.com"
+basePath: "/development"
+schemes:
+- "https"
+paths:
+  /movies:
+    get:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::111111111111:role/apigw01-dynamo-role"
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/Scan"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: "[\r\n #foreach($item in $input.path('$.Items'))\r\
+                \n \t{\r\n \t\t\"id\": \"$item.get('id').get('S')\",\r\n \t\t\"name\"\
+                : \"$item.get('name').get('S')\",\r\n \t\t\"description\" : \"$item.get('description').get('S')\"\
+                \r\n \t}\r\n \t#if ($foreach.hasNext), #end\r\n #end\t\r\n\r\n]\r\n"
+        requestTemplates:
+          application/json: "{\n    \"TableName\" : \"movies\"\n}"
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+    post:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Movie"
+        required: true
+        schema:
+          $ref: "#/definitions/Movie"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      security:
+      - Cognito: []
+      x-amazon-apigateway-request-validator: "Validate body"
+      x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::111111111111:role/apigw01-dynamo-role"
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/PutItem"
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: "{\r\n\t\"TableName\": \"movies\",\r\n\t\"Item\":{\r\n\
+            \t\t\"id\": {\r\n\t\t\t\"S\": \"$input.path('$.id')\"\r\n\t\t},\r\n\t\t\
+            \"name\": {\r\n\t\t\t\"S\": \"$input.path('$.name')\"\r\n\t\t},\r\n\t\t\
+            \"description\": {\r\n\t\t\t\"S\": \"$input.path('$.description')\"\r\n\
+            \t\t}\r\n\t}\r\n}"
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+    put:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      security:
+      - Cognito: []
+      x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::111111111111:role/apigw01-dynamo-role"
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/PutItem"
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: "{\r\n\t\"TableName\": \"movies\",\r\n\t\"Item\":{\r\n\
+            \t\t\"id\": {\r\n\t\t\t\"S\": \"$input.path('$.id')\"\r\n\t\t},\r\n\t\t\
+            \"name\": {\r\n\t\t\t\"S\": \"$input.path('$.name')\"\r\n\t\t},\r\n\t\t\
+            \"description\": {\r\n\t\t\t\"S\": \"$input.path('$.description')\"\r\n\
+            \t\t}\r\n\t}\r\n}"
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+  /movies/{id}:
+    get:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::111111111111:role/apigw01-dynamo-role"
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/GetItem"
+        responses:
+          2\d{2}:
+            statusCode: "200"
+            responseTemplates:
+              application/json: "{\r\n\t\"id\": $input.json('$.Item.id.S'),\r\n\t\"\
+                name\": $input.json('$.Item.name.S'),\r\n\t\"description\" : $input.json('$.Item.description.S')\r\
+                \n}"
+        requestTemplates:
+          application/json: "{\n  \"TableName\" : \"movies\",\n  \"Key\" : {\n   \
+            \ \"id\" : {\n        \"S\" : \"$input.params('id')\"\n    }  \n  }\n}"
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+    delete:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+      security:
+      - Cognito: []
+      x-amazon-apigateway-integration:
+        credentials: "arn:aws:iam::111111111111:role/apigw01-dynamo-role"
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/DeleteItem"
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: "{\n  \"TableName\" : \"movies\",\n  \"Key\" : {\n   \
+            \ \"id\" : {\n        \"S\" : \"$input.params('id')\"\n    }  \n  }\n}"
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        type: "aws"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "x-api-key"
+    in: "header"
+  Cognito:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    x-amazon-apigateway-authtype: "cognito_user_pools"
+    x-amazon-apigateway-authorizer:
+      providerARNs:
+      - "arn:aws:cognito-idp:us-east-1:111111111111:userpool/us-east-1_1IqVjablX"
+      type: "cognito_user_pools"
+definitions:
+  Movie:
+    type: "object"
+    required:
+    - "id"
+    - "name"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+    title: "MovieInputModel"
+  Empty:
+    type: "object"
+    title: "Empty Schema"
+x-amazon-apigateway-gateway-responses:
+  BAD_REQUEST_BODY:
+    statusCode: 400
+    responseTemplates:
+      application/json: "{\"message\": \"Movie id and name are required parameters\"\
+        \ }"
+x-amazon-apigateway-request-validators:
+  Validate body:
+    validateRequestParameters: false
+    validateRequestBody: true

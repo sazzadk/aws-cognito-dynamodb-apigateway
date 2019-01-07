@@ -1,0 +1,16 @@
+export REGION='us-east-1'
+export PROFILE='default'
+export AWS_ACCOUNT_ID=`aws sts get-caller-identity --output text --query 'Account'`
+export POOL_NAME="api-gateway-users"
+export POOL_CLIENT="apigw01-client"
+export USERNAME='apiuser1'
+export PASSWORD='password123'
+export EMAIL='user@gmail.com'
+export STACKNAME='apigw-dynamo'
+export TEMPLATE="./final_api_gw/01_with_CORS_MoviesAPI-development-swagger-apigateway.yaml
+export APINAME="MoviesAPI"
+export STAGE='development'
+export APIKEY="DevAPIKey"
+export USAGEPLAN="DevUsagePlan"
+export POLICY_NAME="iam_api_dynamo_policy"
+export ROLE_NAME="apigw01-dynamo-role"
