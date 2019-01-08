@@ -5,7 +5,7 @@
     "version" : "2019-01-02T19:56:07Z"
   },
   "servers" : [ {
-    "url" : "https://q85og2jq9f.execute-api.us-east-1.amazonaws.com/{basePath}",
+    "url" : "https://RESTAPIID.execute-api.us-east-1.amazonaws.com/{basePath}",
     "variables" : {
       "basePath" : {
         "default" : "/development"
