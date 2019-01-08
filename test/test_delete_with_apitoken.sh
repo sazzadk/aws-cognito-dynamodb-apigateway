@@ -5,6 +5,11 @@ xapikey=''
 token=''
 rest_id=''
 item=6
+if [ -z $token ]
+then
+	echo "Please set the xapikey, token and rest_id first"
+	exit 1
+fi
 url="https://${rest_id}.execute-api.${REGION}.amazonaws.com/${STAGE}/movies/$item"
 payload='@payload.json'
 curl -H "X-API-KEY: $xapikey" \
