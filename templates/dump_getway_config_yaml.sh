@@ -1,6 +1,7 @@
 #!/bin/bash
+API_ID=''
 aws apigateway get-export \
-	--rest-api-id q85og2jq9f --stage-name development\
+	--rest-api-id $API_ID --stage-name development\
 	--export-type swagger \
 	--accepts 'application/yaml' \
 	--parameters extensions='integrations',extensions='api-gateway',extensions='authorizers' \

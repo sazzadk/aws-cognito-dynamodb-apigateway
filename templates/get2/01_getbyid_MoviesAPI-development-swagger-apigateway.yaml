@@ -3,7 +3,7 @@ swagger: "2.0"
 info:
   version: "2018-12-31T18:46:47Z"
   title: "MoviesAPI"
-host: "q85og2jq9f.execute-api.us-east-1.amazonaws.com"
+host: "RESTAPIID.execute-api.us-east-1.amazonaws.com"
 basePath: "/development"
 schemes:
 - "https"
