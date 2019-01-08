@@ -9,9 +9,18 @@ The API gateway is incrementally configured to have a GET method, GET with param
 * IAM
 * Dynamodb
 * API Gateway
+	- Cognito Authorizers
+	- Models for passing data
+	- API Tokens
+	- GET/PUT/DELETE/OPTIONS methods
+	- Body mapping templates with .VTL examples
 
 ## Starting the stack
 Set environment variables in 00_env_vars.sh
+Run templates/update_accountid.sh to change the .yaml template links
+```
+> ./templates/update_accountid.sh
+```
 Modify any template to your need as you test the functions under ./templates folder
 ```
 > ./deploy.sh
