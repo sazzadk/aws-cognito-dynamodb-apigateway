@@ -25,7 +25,8 @@ check for error messages along the steps. Basically the build steps are
 6 test
 
 ## Additional automation
-### There are delete scripts for each component within sub folders
+* There are delete scripts for each component within sub folders
 
 ## To do.
 Initially, I wanted to use the SAM extension for this exercise and realized that SAM and SAM CLI is still not quite mature to fully automate all the components in a complex APi gateway. Yes, it is great to have a swagger file to play with, but the components it supports so far are limited.
+It seems the best approach is to define and test your APi gateway in the AWS Console and then deploy to stage, export from stage as a .yaml file and use that file for automation. 
